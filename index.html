@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PCn 1600 NATIVE — Enterprise Class Audio Processor</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- ✅ BOTÓN DE INICIALIZACIÓN WEB AUDIO API -->
+  <button id="initAudioBtn" style="position:fixed;top:10px;left:50%;transform:translateX(-50%);z-index:9999;padding:8px 16px;background:#a855f7;color:#fff;border:none;border-radius:6px;font-weight:600;cursor:pointer;box-shadow:0 0 12px rgba(168,85,247,0.4);">
+    ▶ Iniciar Motor de Audio
+  </button>
+
+  <!-- ======================================== -->
+  <!-- TU INTERFAZ EXISTENTE (SIN MODIFICAR)    -->
+  <!-- ======================================== -->
+  <div class="main-layout">
+    <div class="conn-panel">
+      <div class="conn-header">
+        <div class="conn-header-left">
+          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
+          <span class="conn-header-title">Connections</span>
+        </div>
+        <button class="conn-close">✕</button>
+      </div>
+      <div class="conn-tree">
+        <div class="tree-node active" onclick="toggleArrow(this)">
+          <span class="arrow">▶</span>
+          <span class="icon"><svg viewBox="0 0 24 24"><path d="M12 3v9.28c-.47-.17-.97-.28-1.5-.28C8.01 12 6 14.01 6 16.5S8.01 21 10.5 21c2.31 0 4.2-1.75 4.45-4H15V6h4V3h-7z"/></svg></span>
+          Audio Input
+          <span class="status-text active-status">OK</span>
+        </div>
+        <div class="tree-indent1">
+          <div class="tree-node active"><span class="dot blue"></span>Ch 1–2 (L/R)</div>
+          <div class="tree-node inactive"><span class="dot gray"></span>Ch 3–4</div>
+          <div class="tree-node inactive"><span class="dot gray"></span>Ch 5–6</div>
+        </div>
+        <div class="tree-node" onclick="toggleArrow(this)">
+          <span class="arrow">▶</span>
+          <span class="icon"><svg viewBox="0 0 24 24"><path d="M12 3v9.28c-.47-.17-.97-.28-1.5-.28C8.01 12 6 14.01 6 16.5S8.01 21 10.5 21c2.31 0 4.2-1.75 4.45-4H15V6h4V3h-7z"/></svg></span>
+          AES/EBU
+          <span class="status-text">LOCK</span>
+        </div>
+        <div class="tree-indent1">
+          <div class="tree-node active"><span class="dot blue"></span>AES-1 (48kHz)</div>
+          <div class="tree-node inactive"><span class="dot gray"></span>AES-2</div>
+        </div>
+        <div class="tree-node" onclick="toggleArrow(this)">
+          <span class="arrow">▶</span>
+          <span class="icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg></span>
+          Dante / AoIP
+          <span class="status-text active-status">ON</span>
+        </div>
+        <div class="tree-indent1">
+          <div class="tree-node active"><span class="dot green"></span>Stream 1 (8ch)</div>
+          <div class="tree-node inactive"><span class="dot gray"></span>Stream 2</div>
+        </div>
+        <div class="tree-node" onclick="toggleArrow(this)">
+          <span class="arrow">▶</span>
+          <span class="icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg></span>
+          WASAPI EXO
+          <span class="status-text active-status">Exclusive (96kHz)</span>
+        </div>
+        <div class="tree-indent1">
+          <div class="tree-node active"><span class="dot blue"></span>Shared</div>
+        </div>
+        <div class="conn-divider"></div>
+        <div class="tree-node" onclick="toggleArrow(this)">
+          <span class="arrow">▶</span>
+          <span class="icon"><svg viewBox="0 0 24 24"><path d="M12 3v9.28c-.47-.17-.97-.28-1.5-.28C8.01 12 6 14.01 6 16.5S8.01 21 10.5 21c2.31 0 4.2-1.75 4.45-4H15V6h4V3h-7z"/></svg></span>
+          Audio Output
+          <span class="status-text active-status">OK</span>
+        </div>
+        <div class="tree-indent1">
+          <div class="tree-node active"><span class="dot blue"></span>Main L/R</div>
+          <div class="tree-node inactive"><span class="dot gray"></span>Aux</div>
+        </div>
+        <div class="tree-node active"><span class="dot blue"></span>AES/EBU Out TX AES-1 Out</div>
+        <div class="tree-node active"><span class="dot green"></span>Dante / AoIP ON Stream TX (8ch)</div>
+        <div class="tree-node active"><span class="dot blue"></span>WASAPI EXO Exclusive (96kHz)</div>
+        <div class="conn-divider"></div>
+        <div class="tree-node" onclick="toggleArrow(this)">
+          <span class="arrow">▶</span>
+          <span class="icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg></span>
+          Network
+          <span class="status-text active-status">1G</span>
+        </div>
+        <div class="tree-indent1">
+          <div class="tree-node active"><span class="dot cyan"></span>Ethernet 1</div>
+          <div class="tree-node inactive"><span class="dot gray"></span>Ethernet 2</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="main-content">
+      <div class="meter-section">
+        <div class="meter-row" id="meterRow"></div>
+        <div class="branding">
+          <div class="branding-logo"></div>
+          <div class="branding-title">PCn 1600</div>
+          <div class="branding-sub">NATIVE DSP ENGINE</div>
+        </div>
+      </div>
+
+      <div class="tab-bar">
+        <div class="tab-item active" data-tab="lessmore">Less-More</div>
+        <div class="tab-item" data-tab="agc">AGC</div>
+        <div class="tab-item" data-tab="eq">EQ</div>
+        <div class="tab-item" data-tab="compressors">Multiband Compressors</div>
+        <div class="tab-item" data-tab="limiters">Limiters</div>
+        <div class="tab-item" data-tab="stereo">Stereo Synth</div>
+        <div class="tab-item" data-tab="deesser">De-Esser</div>
+        <div class="tab-item" data-tab="gate">Noise Gate</div>
+        <div class="tab-item" data-tab="exciter">Exciter</div>
+        <div class="tab-item" data-tab="spectrum">Spectrum</div>
+        <div class="tab-item" data-tab="loudness">EBU R128</div>
+        <div class="tab-item" data-tab="correlation">Correlation</div>
+        <div class="tab-item" data-tab="matrix">Matrix</div>
+        <div class="tab-item" data-tab="monitor">Monitor</div>
+        <div class="tab-item" data-tab="dither">Dither</div>
+      </div>
+
+      <div class="tab-content">
+        <!-- PANEL: LESS-MORE -->
+        <div id="panel-lessmore">
+          <div class="controls-grid">
+            <div class="group-box">
+              <div class="gb-title"><span class="dot"></span>Amount</div>
+              <div class="preset-readonly">Preset: Factory Default</div>
+              <div class="fader-channel" id="f-lessmore" data-min="0" data-max="12" data-unit="dB" data-value="0">
+                <div class="fader-label">Less-More</div>
+                <div class="fader-track">
+                  <div class="fader-fill"></div>
+                  <div class="fader-thumb"></div>
+                </div>
+                <div class="fader-value">0.0 dB</div>
+              </div>
+            </div>
+            <div class="group-box">
+              <div class="gb-title"><span class="dot"></span>Target Loudness</div>
+              <div class="fader-channel" id="s-loudness" data-min="-24" data-max="-10" data-unit="LUFS" data-value="-16">
+                <div class="fader-label">LUFS</div>
+                <div class="fader-track">
+                  <div class="fader-fill"></div>
+                  <div class="fader-thumb"></div>
+                </div>
+                <div class="fader-value">-16.0 LUFS</div>
+              </div>
+              <div class="lufs-display">
+                <span class="lufs-value" id="loudTarget">-16.0</span>
+                <span class="lufs-unit">LUFS</span>
+                <span class="lufs-lu">LU</span>
+              </div>
+            </div>
+            <div class="group-box">
+              <div class="gb-title"><span class="dot"></span>Trim & Phase</div>
+              <div class="fader-channel" id="f-trim" data-min="-12" data-max="12" data-unit="dB" data-value="0">
+                <div class="fader-label">Pass-through Trim</div>
+                <div class="fader-track">
+                  <div class="fader-fill"></div>
+                  <div class="fader-thumb"></div>
+                </div>
+                <div class="fader-value">0.0 dB</div>
+              </div>
+              <div class="toggle-row">
+                <span class="toggle-label">Phase Corrector</span>
+                <div class="toggle-switch on" onclick="this.classList.toggle('on')">
+                  <div class="knob"></div>
+                </div>
+              </div>
+              <div class="fader-channel" id="f-phase" data-min="0" data-max="360" data-unit="°" data-value="90">
+                <div class="fader-label">Freq</div>
+                <div class="fader-track">
+                  <div class="fader-fill"></div>
+                  <div class="fader-thumb"></div>
+                </div>
+                <div class="fader-value">90°</div>
+              </div>
+              <div class="hz-display">1.0 <span class="hz-unit">kHz</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PANEL: AGC -->
+        <div id="panel-agc" style="display:none;">
+          <div class="controls-grid">
+            <div class="group-box">
+              <div class="gb-title"><span class="dot"></span>Active</div>
+              <div class="fader-channel" id="f-agc-th" data-min="-60" data-max="0" data-unit="dB" data-value="-12">
+                <div class="fader-label">Threshold</div>
+                <div class="fader-track">
+                  <div class="fader-fill"></div>
+                  <div class="fader-thumb"></div>
+                </div>
+                <div class="fader-value">-12.0 dB</div>
+              </div>
+            </div>
+            <div class="group-box">
+              <div class="gb-title"><span class="dot"></span>Ratio</div>
+              <div class="fader-channel" id="f-agc-rat" data-min="1" data-max="20" data-unit=":1" data-value="2.5">
+                <div class="fader-label">Ratio</div>
+                <div class="fader-track">
+                  <div class="fader-fill"></div>
+                  <div class="fader-thumb"></div>
+                </div>
+                <div class="fader-value">2.5:1</div>
+              </div>
+            </div>
+            <div class="group-box">
+              <div class="gb-title"><span class="dot"></span>Envelope</div>
+              <div class="fader-channel" id="f-agc-att" data-min="1" data-max="500" data-unit="ms" data-value="15">
+                <div class="fader-label">Attack</div>
+                <div class="fader-track">
+                  <div class="fader-fill"></div>
+                  <div class="fader-thumb"></div>
+                </div>
+                <div class="fader-value">15 ms</div>
+              </div>
+              <div class="fader-channel" id="f-agc-rel" data-min="10" data-max="2000" data-unit="ms" data-value="120">
+                <div class="fader-label">Release</div>
+                <div class="fader-track">
+                  <div class="fader-fill"></div>
+                  <div class="fader-thumb"></div>
+                </div>
+                <div class="fader-value">120 ms</div>
+              </div>
+            </div>
+            <div class="group-box">
+              <div class="gb-title"><span class="dot"></span>Max Gain</div>
+              <div class="fader-channel" id="f-agc-max" data-min="0" data-max="30" data-unit="dB" data-value="18">
+                <div class="fader-label">Max Gain</div>
+                <div class="fader-track">
+                  <div class="fader-fill"></div>
+                  <div class="fader-thumb"></div>
+                </div>
+                <div class="fader-value">+18.0 dB</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PANEL: EQ -->
+        <div id="panel-eq" style="display:none;">
+          <div class="controls-grid">
+            <div class="group-box">
+              <div class="gb-title"><span class="dot"></span>3-Band Parametric</div>
+              <div class="fader-channel" id="f-eq-low" data-min="-12" data-max="12" data-unit="dB" data-value="2">
+                <div class="fader-label">Low</div>
+                <div class="fader-track">
+                  <div class="fader-fill"></div>
+                  <div class="fader-thumb"></div>
+                </div>
+                <div class="fader-value">+2.0 dB</div>
+              </div>
+              <div class="fader-channel" id="f-eq-mid" data-min="-12" data-max="12" data-unit="dB" data-value="-1.5">
+                <div class="fader-label">Mid</div>
+                <div class="fader-track">
+                  <div class="fader-fill"></div>
+                  <div class="fader-thumb"></div>
+                </div>
+                <div class="fader-value">-1.5 dB</div>
+              </div>
+              <div class="fader-channel" id="f-eq-high" data-min="-12" data-max="12" data-unit="dB" data-value="3">
+                <div class="fader-label">High</div>
+                <div class="fader-track">
+                  <div class="fader-fill"></div>
+                  <div class="fader-thumb"></div>
+                </div>
+                <div class="fader-value">+3.0 dB</div>
+              </div>
+            </div>
+            <div class="group-box">
+              <div class="gb-title"><span class="dot"></span>EQ Presets</div>
+              <div class="monitor-grid" style="grid-template-columns: repeat(2, 1fr);">
+                <button class="monitor-btn" onclick="applyEQPreset('flat')">Flat</button>
+                <button class="monitor-btn active" onclick="applyEQPreset('voice')">Broadcast Voice Clarity</button>
+                <button class="monitor-btn" onclick="applyEQPreset('bass')">Bass Boost</button>
+                <button class="monitor-btn" onclick="applyEQPreset('air')">Air Enhance</button>
+              </div>
+              <div class="toggle-row">
+                <span class="toggle-label">Linear Phase</span>
+                <div class="toggle-switch on" onclick="this.classList.toggle('on')"><div class="knob"></div></div>
+              </div>
+            </div>
+            <div class="group-box cyan">
+              <div class="gb-title cyan"><span class="dot cyan"></span>Multiband EQ</div>
+              <div class="fader-channel" id="f-mb1" data-min="-20" data-max="10" data-unit="dB" data-value="-3">
+                <div class="fader-label">Band 1</div>
+                <div class="fader-track">
+                  <div class="fader-fill"></div>
+                  <div class="fader-thumb"></div>
+                </div>
+                <div class="fader-value">-3.0 dB</div>
+              </div>
+              <div class="fader-channel" id="f-mb2" data-min="-20" data-max="10" data-unit="dB" data-value="1.5">
+                <div class="fader-label">Band 2</div>
+                <div class="fader-track">
+                  <div class="fader-fill"></div>
+                  <div class="fader-thumb"></div>
+                </div>
+                <div class="fader-value">+1.5 dB</div>
+              </div>
+              <div class="fader-channel" id="f-mb3" data-min="-20" data-max="10" data-unit="dB" data-value="2">
+                <div class="fader-label">Band 3</div>
+                <div class="fader-track">
+                  <div class="fader-fill"></div>
+                  <div class="fader-thumb"></div>
+                </div>
+                <div class="fader-value">+2.0 dB</div>
+              </div>
+              <div class="slider-container" id="slider-xo">
+                <div class="slider-row">
+                  <span class="slider-label">XO</span>
+                  <div class="slider-track" id="s-xo1" data-min="50" data-max="5000" data-value="200">
+                    <div class="slider-fill" style="width: 4.16%;"></div>
+                    <div class="slider-thumb" style="left: 4.16%;"></div>
+                  </div>
+                  <input type="text" value="200" readonly>
+                </div>
+                <div class="slider-row">
+                  <span class="slider-label">XO</span>
+                  <div class="slider-track" id="s-xo2" data-min="500" data-max="20000" data-value="4000">
+                    <div class="slider-fill" style="width: 18.05%;"></div>
+                    <div class="slider-thumb" style="left: 18.05%;"></div>
+                  </div>
+                  <input type="text" value="4.0k" readonly>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PANEL: COMPRESSORS -->
+        <div id="panel-compressors" style="display:none;">
+          <div class="controls-grid">
+            <div class="group-box">
+              <div class="gb-title"><span class="dot"></span>Threshold & Ratio</div>
+              <div class="fader-channel" id="f-comp-th" data-min="-60" data-max="0" data-unit="dB" data-value="-15">
+                <div class="fader-label">Threshold</div>
+                <div class="fader-track">
+                  <div class="fader-fill"></div>
+                  <div class="fader-thumb"></div>
+                </div>
+                <div class="fader-value">-15.0 dB</div>
+              </div>
+              <div class="fader-channel" id="f-comp-rat" data-min="1" data-max="20" data-unit=":1" data-value="4">
+                <div class="fader-label">Ratio</div>
+                <div class="fader-track">
+                  <div class="fader-fill"></div>
+                  <div class="fader-thumb"></div>
+                </div>
+                <div class="fader-value">4.0:1</div>
+              </div>
+            </div>
+            <div class="group-box">
+              <div class="gb-title"><span class="dot"></span>Envelope</div>
+              <div class="fader-channel" id="f-comp-att" data-min="1" data-max="100" data-unit="ms" data-value="5">
+                <div class="fader-label">Attack</div>
+                <div class="fader-track">
+                  <div class="fader-fill"></div>
+                  <div class="fader-thumb"></div>
+                </div>
+                <div class="fader-value">5 ms</div>
+              </div>
+              <div class="fader-channel" id="f-comp-rel" data-min="10" data-max="1000" data-unit="ms" data-value="150">
+                <div class="fader-label">Release</div>
+                <div class="fader-track">
+                  <div class="fader-fill"></div>
+                  <div class="fader-thumb"></div>
+                </div>
+                <div class="fader-value">150 ms</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PANEL: LIMITERS -->
+        <div id="panel-limiters" style="display:none;">
+          <div class="controls-grid">
+            <div class="group-box">
+              <div class="gb-title"><span class="dot"></span>Ceiling</div>
+              <div class="fader-channel" id="f-lim-ceil" data-min="-12" data-max="0" data-unit="dB" data-value="-0.1">
+                <div class="fader-label">Ceiling</div>
+                <div class="fader-track">
+                  <div class="fader-fill"></div>
+                  <div class="fader-thumb"></div>
+                </div>
+                <div class="fader-value">-0.1 dB</div>
+              </div>
+            </div>
+            <div class="group-box">
+              <div class="gb-title"><span class="dot"></span>Threshold</div>
+              <div class="fader-channel" id="f-lim-th" data-min="-30" data-max="0" data-unit="dB" data-value="-6">
+                <div class="fader-label">Threshold</div>
+                <div class="fader-track">
+                  <div class="fader-fill"></div>
+                  <div class="fader-thumb"></div>
+                </div>
+                <div class="fader-value">-6.0 dB</div>
+              </div>
+            </div>
+            <div class="group-box">
+              <div class="gb-title"><span class="dot"></span>Release</div>
+              <div class="fader-channel" id="f-lim-rel" data-min="10" data-max="1000" data-unit="ms" data-value="80">
+                <div class="fader-label">Release</div>
+                <div class="fader-track">
+                  <div class="fader-fill"></div>
+                  <div class="fader-thumb"></div>
+                </div>
+                <div class="fader-value">80 ms</div>
+              </div>
+            </div>
+            <div class="group-box">
+              <div class="gb-title"><span class="dot"></span>Lookahead</div>
+              <div class="toggle-row">
+                <span class="toggle-label">Lookahead Delay</span>
+                <div class="toggle-switch on" onclick="this.classList.toggle('on')"><div class="knob"></div></div>
+              </div>
+              <div class="toggle-row">
+                <span class="toggle-label">True Peak</span>
+                <div class="toggle-switch on" onclick="this.classList.toggle('on')"><div class="knob"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PANEL: STEREO SYNTH -->
+        <div id="panel-stereo" style="display:none;">
+          <div class="controls-grid">
+            <div class="group-box purple">
+              <div class="gb-title purple"><span class="dot purple"></span>Phase & Depth</div>
+              <div class="fader-channel" id="f-synth-phase" data-min="0" data-max="180" data-unit="°" data-value="90">
+                <div class="fader-label">Phase</div>
+                <div class="fader-track">
+                  <div class="fader-fill"></div>
+                  <div class="fader-thumb"></div>
+                </div>
+                <div class="fader-value">90°</div>
+              </div>
+              <div class="fader-channel" id="f-synth-depth" data-min="0" data-max="100" data-unit="%" data-value="30">
+                <div class="fader-label">Depth</div>
+                <div class="fader-track">
+                  <div class="fader-fill"></div>
+                  <div class="fader-thumb"></div>
+                </div>
+                <div class="fader-value">30%</div>
+              </div>
+              <div class="fader-channel" id="f-synth-rate" data-min="0.1" data-max="10" data-unit="Hz" data-value="2.5">
+                <div class="fader-label">Rate</div>
+                <div class="fader-track">
+                  <div class="fader-fill"></div>
+                  <div class="fader-thumb"></div>
+                </div>
+                <div class="fader-value">2.5 Hz</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PANEL: DE-ESSER -->
+        <div id="panel-deesser" style="display:none;">
+          <div class="controls-grid">
+            <div class="group-box">
+              <div class="gb-title"><span class="dot"></span>De-Esser</div>
+              <div class="fader-channel" id="f-de-th" data-min="-30" data-max="0" data-unit="dB" data-value="-12">
+                <div class="fader-label">Threshold</div>
+                <div class="fader-track">
+                  <div class="fader-fill"></div>
+                  <div class="fader-thumb"></div>
+                </div>
+                <div class="fader-value">-12.0 dB</div>
+              </div>
+              <div class="slider-container">
+                <div class="slider-row">
+                  <span class="slider-label">Freq</span>
+                  <div class="slider-track" id="s-de-freq" data-min="4000" data-max="12000" data-value="6500">
+                    <div class="slider-fill" style="width: 31.25%;"></div>
+                    <div class="slider-thumb" style="left: 31.25%;"></div>
+                  </div>
+                  <input type="text" value="6.5k" readonly>
+                </div>
+              </div>
+              <div class="toggle-row">
+                <span class="toggle-label">Wide Band</span>
+                <div class="toggle-switch" onclick="this.classList.toggle('on')"><div class="knob"></div></div>
+              </div>
+              <div class="fader-channel" id="f-de-range" data-min="0" data-max="20" data-unit="dB" data-value="8">
+                <div class="fader-label">Max Red.</div>
+                <div class="fader-track">
+                  <div class="fader-fill"></div>
+                  <div class="fader-thumb"></div>
+                </div>
+                <div class="fader-value">8.0 dB</div>
+              </div>
+            </div>
+            <div class="group-box">
+              <div class="gb-title"><span class="dot"></span>Dynamics</div>
+              <div class="fader-channel" id="f-de-att" data-min="1" data-max="50" data-unit="ms" data-value="3">
+                <div class="fader-label">Attack</div>
+                <div class="fader-track">
+                  <div class="fader-fill"></div>
+                  <div class="fader-thumb"></div>
+                </div>
+                <div class="fader-value">3 ms</div>
+              </div>
+              <div class="fader-channel" id="f-de-rel" data-min="10" data-max="500" data-unit="ms" data-value="80">
+                <div class="fader-label">Release</div>
+                <div class="fader-track">
+                  <div class="fader-fill"></div>
+                  <div class="fader-thumb"></div>
+                </div>
+                <div class="fader-value">80 ms</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PANEL: NOISE GATE -->
+        <div id="panel-gate" style="display:none;">
+          <div class="controls-grid">
+            <div class="group-box">
+              <div class="gb-title"><span class="dot"></span>Threshold & Range</div>
+              <div class="fader-channel" id="f-gate-th" data-min="-60" data-max="0" data-unit="dB" data-value="-36">
+                <div class="fader-label">Threshold</div>
+                <div class="fader-track">
+                  <div class="fader-fill"></div>
+                  <div class="fader-thumb"></div>
+                </div>
+                <div class="fader-value">-36.0 dB</div>
+              </div>
+              <div class="fader-channel" id="f-gate-range" data-min="-60" data-max="0" data-unit="dB" data-value="-40">
+                <div class="fader-label">Depth</div>
+                <div class="fader-track">
+                  <div class="fader-fill"></div>
+                  <div class="fader-thumb"></div>
+                </div>
+                <div class="fader-value">-40.0 dB</div>
+              </div>
+            </div>
+            <div class="group-box">
+              <div class="gb-title"><span class="dot"></span>Envelope & Sidechain</div>
+              <div class="fader-channel" id="f-gate-att" data-min="1" data-max="200" data-unit="ms" data-value="5">
+                <div class="fader-label">Attack</div>
+                <div class="fader-track">
+                  <div class="fader-fill"></div>
+                  <div class="fader-thumb"></div>
+                </div>
+                <div class="fader-value">5 ms</div>
+              </div>
+              <div class="fader-channel" id="f-gate-rel" data-min="10" data-max="2000" data-unit="ms" data-value="200">
+                <div class="fader-label">Release</div>
+                <div class="fader-track">
+                  <div class="fader-fill"></div>
+                  <div class="fader-thumb"></div>
+                </div>
+                <div class="fader-value">200 ms</div>
+              </div>
+              <div class="fader-channel" id="f-gate-hold" data-min="10" data-max="2000" data-unit="ms" data-value="100">
+                <div class="fader-label">Hold</div>
+                <div class="fader-track">
+                  <div class="fader-fill"></div>
+                  <div class="fader-thumb"></div>
+                </div>
+                <div class="fader-value">100 ms</div>
+              </div>
+              <div class="slider-container">
+                <div class="slider-row">
+                  <span class="slider-label">HPF</span>
+                  <div class="slider-track" id="s-gate-hpf" data-min="20" data-max="2000" data-value="200">
+                    <div class="slider-fill" style="width: 9.09%;"></div>
+                    <div class="slider-thumb" style="left: 9.09%;"></div>
+                  </div>
+                  <input type="text" value="200 Hz" readonly>
+                </div>
+              </div>
+              <div class="slider-container">
+                <div class="slider-row">
+                  <span class="slider-label">Hyst</span>
+                  <div class="slider-track" id="s-gate-hyst" data-min="0" data-max="10" data-value="2">
+                    <div class="slider-fill" style="width: 20%;"></div>
+                    <div class="slider-thumb" style="left: 20%;"></div>
+                  </div>
+                  <input type="text" value="2.0 dB" readonly>
+                </div>
+              </div>
+              <div class="toggle-row">
+                <span class="toggle-label">Key Listen</span>
+                <div class="toggle-switch" onclick="this.classList.toggle('on')"><div class="knob"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PANEL: EXCITER -->
+        <div id="panel-exciter" style="display:none;">
+          <div class="controls-grid">
+            <div class="group-box gold">
+              <div class="gb-title gold"><span class="dot gold"></span>Harmonic Exciter</div>
+              <div class="fader-channel" id="f-exc-drive" data-min="0" data-max="100" data-unit="%" data-value="35">
+                <div class="fader-label">Drive</div>
+                <div class="fader-track">
+                  <div class="fader-fill"></div>
+                  <div class="fader-thumb"></div>
+                </div>
+                <div class="fader-value">35%</div>
+              </div>
+              <div class="slider-container">
+                <div class="slider-row">
+                  <span class="slider-label">Tone</span>
+                  <div class="slider-track" id="s-exc-freq" data-min="1000" data-max="10000" data-value="3000">
+                    <div class="slider-fill" style="width: 22.22%;"></div>
+                    <div class="slider-thumb" style="left: 22.22%;"></div>
+                  </div>
+                  <input type="text" value="3.0k" readonly>
+                </div>
+              </div>
+              <div class="fader-channel" id="f-exc-mix" data-min="0" data-max="100" data-unit="%" data-value="50">
+                <div class="fader-label">Mix</div>
+                <div class="fader-track">
+                  <div class="fader-fill"></div>
+                  <div class="fader-thumb"></div>
+                </div>
+                <div class="fader-value">50%</div>
+              </div>
+              <div class="fader-channel" id="f-exc-out" data-min="-12" data-max="12" data-unit="dB" data-value="0">
+                <div class="fader-label">Output</div>
+                <div class="fader-track">
+                  <div class="fader-fill"></div>
+                  <div class="fader-thumb"></div>
+                </div>
+                <div class="fader-value">0.0 dB</div>
+              </div>
+              <div class="preset-readonly">Preset: Broadcast Clarity</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PANEL: SPECTRUM -->
+        <div id="panel-spectrum" style="display:none;">
+          <div class="group-box full">
+            <div class="gb-title"><span class="dot"></span>Real-Time Spectrum Analyzer</div>
+            <div class="spectrum-container">
+              <canvas id="spectrumCanvas"></canvas>
+              <div class="spectrum-labels">
+                <span>20Hz</span><span>50</span><span>100</span><span>200</span><span>500</span><span>1k</span><span>2k</span><span>5k</span><span>10k</span><span>20kHz</span>
+              </div>
+            </div>
+            <div class="monitor-grid" style="margin-top:8px; grid-template-columns: repeat(7, 1fr);">
+              <button class="monitor-btn active" onclick="toggleSpectrum(this)">FFT: 4096</button>
+              <button class="monitor-btn" onclick="toggleSpectrum(this)">FFT: 8192</button>
+              <button class="monitor-btn" onclick="toggleSpectrum(this)">FFT: 16384</button>
+              <button class="monitor-btn" onclick="toggleSpectrum(this)">Peak Hold</button>
+              <button class="monitor-btn" onclick="toggleSpectrum(this)">Max Hold</button>
+              <button class="monitor-btn" onclick="toggleSpectrum(this)">Smoothing</button>
+              <button class="monitor-btn" onclick="toggleSpectrum(this)">Log Scale</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- PANEL: LOUDNESS -->
+        <div id="panel-loudness" style="display:none;">
+          <div class="group-box full">
+            <div class="gb-title"><span class="dot"></span>EBU R128 Loudness Meter</div>
+            <div class="loudness-grid">
+              <div class="loudness-cell">
+                <div class="lbl">Integrated</div>
+                <div class="val" id="loudInt">-16.2</div>
+                <div class="unit">LUFS</div>
+              </div>
+              <div class="loudness-cell">
+                <div class="lbl">Short-Term</div>
+                <div class="val" id="loudShort">-14.8</div>
+                <div class="unit">LUFS</div>
+              </div>
+              <div class="loudness-cell">
+                <div class="lbl">Momentary</div>
+                <div class="val" id="loudMoment">-12.3</div>
+                <div class="unit">LUFS</div>
+              </div>
+              <div class="loudness-cell">
+                <div class="lbl">LRA</div>
+                <div class="val" id="loudLRA">5.2</div>
+                <div class="unit">LU</div>
+              </div>
+              <div class="loudness-cell">
+                <div class="lbl">True Peak</div>
+                <div class="val" id="loudTP">-1.2</div>
+                <div class="unit">dBTP</div>
+              </div>
+              <div class="loudness-cell warning">
+                <div class="lbl">Target</div>
+                <div class="val" id="loudTarget">-16.0</div>
+                <div class="unit">LUFS</div>
+              </div>
+              <div class="loudness-cell pass">
+                <div class="lbl">Range</div>
+                <div class="val" id="loudRange">PASS</div>
+                <div class="unit"></div>
+              </div>
+              <div class="loudness-cell">
+                <div class="lbl">Elapsed</div>
+                <div class="val" id="loudnessTime">00:00</div>
+                <div class="unit">hh:mm</div>
+              </div>
+            </div>
+            <div class="spectrum-container" style="margin-top:10px;">
+              <canvas id="loudnessCanvas"></canvas>
+              <div class="spectrum-labels">
+                <span>Loudness History</span>
+                <div class="monitor-btn" onclick="toggleLoudnessReset(this)">Auto-Reset</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PANEL: CORRELATION -->
+        <div id="panel-correlation" style="display:none;">
+          <div class="controls-grid">
+            <div class="group-box">
+              <div class="gb-title"><span class="dot"></span>Stereo Correlation</div>
+              <div class="corr-meter">
+                <div class="corr-bar">
+                  <div class="corr-fill" id="corrFill"></div>
+                </div>
+                <div class="corr-labels">
+                  <span>-1 (Out)</span>
+                  <span>0</span>
+                  <span>+1 (In)</span>
+                </div>
+                <div class="corr-value" id="corrValue">+0.85</div>
+                <div class="corr-labels" id="corrStatus">Corr: +0.85 (Good)</div>
+              </div>
+              <div class="spectrum-container" style="margin-top:10px;">
+                <canvas id="vectorscopeCanvas"></canvas>
+                <div class="spectrum-labels">
+                  <span>Phase Analysis Window</span>
+                </div>
+              </div>
+              <div class="toggle-row">
+                <span class="toggle-label" id="monoCheck">Mono Check</span>
+                <div class="toggle-switch" onclick="this.classList.toggle('on')"><div class="knob"></div></div>
+              </div>
+              <div class="fader-channel" id="f-ms-bal" data-min="-6" data-max="6" data-unit="dB" data-value="0">
+                <div class="fader-label">M/S Ratio</div>
+                <div class="fader-track">
+                  <div class="fader-fill"></div>
+                  <div class="fader-thumb"></div>
+                </div>
+                <div class="fader-value">0.0 dB</div>
+              </div>
+              <div class="toggle-row">
+                <span class="toggle-label">MS Decode</span>
+                <div class="toggle-switch" onclick="this.classList.toggle('on')"><div class="knob"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PANEL: MATRIX -->
+        <div id="panel-matrix" style="display:none;">
+          <div class="group-box">
+            <div class="gb-title"><span class="dot"></span>Input/Output Matrix Router</div>
+            <div class="matrix-grid">
+              <div class="matrix-cell header"></div>
+              <div class="matrix-cell header">Out 1</div>
+              <div class="matrix-cell header">Out 2</div>
+              <div class="matrix-cell header">Out 3</div>
+              <div class="matrix-cell header">Out 4</div>
+              <div class="matrix-cell row-header">In 1</div>
+              <div class="matrix-cell value active" onclick="toggleMatrixCell(this)"><input value="0.0"></div>
+              <div class="matrix-cell value" onclick="toggleMatrixCell(this)"><input value="-∞"></div>
+              <div class="matrix-cell value" onclick="toggleMatrixCell(this)"><input value="-∞"></div>
+              <div class="matrix-cell value" onclick="toggleMatrixCell(this)"><input value="-∞"></div>
+              <div class="matrix-cell row-header">In 2</div>
+              <div class="matrix-cell value" onclick="toggleMatrixCell(this)"><input value="-∞"></div>
+              <div class="matrix-cell value active" onclick="toggleMatrixCell(this)"><input value="0.0"></div>
+              <div class="matrix-cell value" onclick="toggleMatrixCell(this)"><input value="-∞"></div>
+              <div class="matrix-cell value" onclick="toggleMatrixCell(this)"><input value="-∞"></div>
+              <div class="matrix-cell row-header">In 3</div>
+              <div class="matrix-cell value" onclick="toggleMatrixCell(this)"><input value="-∞"></div>
+              <div class="matrix-cell value" onclick="toggleMatrixCell(this)"><input value="-∞"></div>
+              <div class="matrix-cell value active" onclick="toggleMatrixCell(this)"><input value="0.0"></div>
+              <div class="matrix-cell value" onclick="toggleMatrixCell(this)"><input value="-∞"></div>
+              <div class="matrix-cell row-header">In 4</div>
+              <div class="matrix-cell value" onclick="toggleMatrixCell(this)"><input value="-∞"></div>
+              <div class="matrix-cell value" onclick="toggleMatrixCell(this)"><input value="-∞"></div>
+              <div class="matrix-cell value" onclick="toggleMatrixCell(this)"><input value="-∞"></div>
+              <div class="matrix-cell value active" onclick="toggleMatrixCell(this)"><input value="0.0"></div>
+            </div>
+            <div class="monitor-grid" style="margin-top:8px; grid-template-columns: repeat(5, 1fr);">
+              <button class="monitor-btn" onclick="routeMatrix('stereo')">Stereo</button>
+              <button class="monitor-btn" onclick="routeMatrix('dual')">Dual Mono</button>
+              <button class="monitor-btn" onclick="routeMatrix('sum')">Sum L+R</button>
+              <button class="monitor-btn" onclick="routeMatrix('cross')">Cross</button>
+              <button class="monitor-btn" onclick="routeMatrix('clear')">Clear</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- PANEL: MONITOR -->
+        <div id="panel-monitor" style="display:none;">
+          <div class="controls-grid">
+            <div class="group-box">
+              <div class="gb-title"><span class="dot"></span>Monitor Control</div>
+              <div class="monitor-grid">
+                <button class="monitor-btn" onclick="monitorToggle(this, 'main')">Main</button>
+                <button class="monitor-btn active" onclick="monitorToggle(this, 'alt')">Alt</button>
+                <button class="monitor-btn mute" onclick="monitorToggle(this, 'mute')">MUTE</button>
+                <button class="monitor-btn dim" onclick="monitorToggle(this, 'dim')">DIM</button>
+                <button class="monitor-btn" onclick="monitorToggle(this, 'mono')">MONO</button>
+              </div>
+              <div class="fader-channel" id="f-mon-level" data-min="-80" data-max="0" data-unit="dB" data-value="-20">
+                <div class="fader-label">Volume</div>
+                <div class="fader-track">
+                  <div class="fader-fill"></div>
+                  <div class="fader-thumb"></div>
+                </div>
+                <div class="fader-value">-20.0 dB</div>
+              </div>
+            </div>
+            <div class="group-box">
+              <div class="gb-title"><span class="dot"></span>Talkback & Calibration</div>
+              <div class="monitor-btn active" onclick="this.classList.toggle('active')">TALK</div>
+              <div class="fader-channel" id="f-tb-gain" data-min="-20" data-max="10" data-unit="dB" data-value="-10">
+                <div class="fader-label">Gain</div>
+                <div class="fader-track">
+                  <div class="fader-fill"></div>
+                  <div class="fader-thumb"></div>
+                </div>
+                <div class="fader-value">-10.0 dB</div>
+              </div>
+              <select id="tb-source">
+                <option>Source: Internal Mic</option>
+                <option>Line In 3-4</option>
+                <option>Dante Stream 2</option>
+              </select>
+              <div class="monitor-grid" style="margin-top:8px;">
+                <button class="monitor-btn" onclick="this.classList.toggle('active')">Pink Noise</button>
+                <button class="monitor-btn" onclick="this.classList.toggle('active')">1kHz Tone</button>
+              </div>
+              <div class="slider-container" style="margin-top:8px;">
+                <div class="slider-row">
+                  <span class="slider-label">Cal</span>
+                  <div class="slider-track" id="s-cal-ref" data-min="60" data-max="100" data-value="85">
+                    <div class="slider-fill" style="width: 62.5%;"></div>
+                    <div class="slider-thumb" style="left: 62.5%;"></div>
+                  </div>
+                  <input type="text" value="85 dB" readonly>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PANEL: DITHER -->
+        <div id="panel-dither" style="display:none;">
+          <div class="controls-grid">
+            <div class="group-box">
+              <div class="gb-title"><span class="dot"></span>Dither Engine</div>
+              <div class="monitor-btn active" onclick="this.classList.toggle('active')">TPDF (Triangular PDF)</div>
+              <div class="monitor-btn" onclick="this.classList.toggle('active')">Rectangular PDF</div>
+              <div class="monitor-btn" onclick="this.classList.toggle('active')">Gaussian PDF</div>
+              <div class="monitor-btn" onclick="this.classList.toggle('active')">Power-of-2</div>
+              <div class="toggle-row">
+                <span class="toggle-label" id="ditherToggle">Dither Enabled</span>
+                <div class="toggle-switch on" onclick="this.classList.toggle('on'); updateDither()"><div class="knob"></div></div>
+              </div>
+              <div class="toggle-row">
+                <span class="toggle-label" id="shapeToggle">Shape Enabled</span>
+                <div class="toggle-switch on" onclick="this.classList.toggle('on')"><div class="knob"></div></div>
+              </div>
+              <div class="toggle-row">
+                <span class="toggle-label">DC Offset Removal</span>
+                <div class="toggle-switch on" onclick="this.classList.toggle('on')"><div class="knob"></div></div>
+              </div>
+              <div class="toggle-row">
+                <span class="toggle-label" id="ditherBypass">Bypass All</span>
+                <div class="toggle-switch" onclick="this.classList.toggle('on')"><div class="knob"></div></div>
+              </div>
+            </div>
+            <div class="group-box">
+              <div class="gb-title"><span class="dot"></span>Output Format & Truncation</div>
+              <div class="output-format-row">
+                <button class="format-btn" onclick="setBitDepth(this, 16)">16-bit</button>
+                <button class="format-btn active" onclick="setBitDepth(this, 24)">24-bit</button>
+                <button class="format-btn" onclick="setBitDepth(this, 32)">32-float</button>
+              </div>
+              <div class="monitor-grid" style="margin-top:8px;">
+                <button class="monitor-btn" onclick="this.classList.toggle('active')">Signed Integer</button>
+                <button class="monitor-btn" onclick="this.classList.toggle('active')">Unsigned Integer</button>
+                <button class="monitor-btn active" onclick="this.classList.toggle('active')">IEEE 754 Float</button>
+                <button class="monitor-btn" onclick="this.classList.toggle('active')">μ-Law Companding</button>
+                <button class="monitor-btn" onclick="this.classList.toggle('active')">A-Law Companding</button>
+              </div>
+              <div class="preset-readonly" id="ditherFormatLabel">Format: 24-bit / 96kHz</div>
+            </div>
+            <div class="group-box full">
+              <div class="gb-title"><span class="dot"></span>Noise Shaping Curve</div>
+              <div class="spectrum-container">
+                <canvas id="ditherCurveCanvas"></canvas>
+              </div>
+              <div class="output-format-row" style="margin-top:8px;">
+                <button class="format-btn active" onclick="document.getElementById('noiseShapeType').value='none'; this.parentElement.querySelectorAll('.format-btn').forEach(b=>b.classList.remove('active')); this.classList.add('active');">None (Flat)</button>
+                <button class="format-btn" onclick="document.getElementById('noiseShapeType').value='low'; this.parentElement.querySelectorAll('.format-btn').forEach(b=>b.classList.remove('active')); this.classList.add('active');">Low (EBU Type A)</button>
+                <button class="format-btn" onclick="document.getElementById('noiseShapeType').value='medium'; this.parentElement.querySelectorAll('.format-btn').forEach(b=>b.classList.remove('active')); this.classList.add('active');">Medium (EBU Type B)</button>
+                <button class="format-btn" onclick="document.getElementById('noiseShapeType').value='high'; this.parentElement.querySelectorAll('.format-btn').forEach(b=>b.classList.remove('active')); this.classList.add('active');">High (Psychoacoustic)</button>
+                <button class="format-btn" onclick="document.getElementById('noiseShapeType').value='shibata'; this.parentElement.querySelectorAll('.format-btn').forEach(b=>b.classList.remove('active')); this.classList.add('active');">Shibata (Nugen)</button>
+                <button class="format-btn" onclick="document.getElementById('noiseShapeType').value='mbm'; this.parentElement.querySelectorAll('.format-btn').forEach(b=>b.classList.remove('active')); this.classList.add('active');">MBM (Waves L2)</button>
+                <button class="format-btn" onclick="document.getElementById('noiseShapeType').value='uv22'; this.parentElement.querySelectorAll('.format-btn').forEach(b=>b.classList.remove('active')); this.classList.add('active');">UV22 (Apogee)</button>
+                <button class="format-btn" onclick="document.getElementById('noiseShapeType').value='idrc'; this.parentElement.querySelectorAll('.format-btn').forEach(b=>b.classList.remove('active')); this.classList.add('active');">iZotope IRC</button>
+              </div>
+              <input type="hidden" id="noiseShapeType" value="low">
+              <div class="dither-info">
+                <div class="dither-stat">
+                  <div class="lbl">Noise Floor</div>
+                  <div class="val" id="ditherNoise">-93.3</div>
+                  <div class="unit">dBFS</div>
+                </div>
+                <div class="dither-stat">
+                  <div class="lbl">THD+N</div>
+                  <div class="val" id="ditherThd">-90.2</div>
+                  <div class="unit">dB</div>
+                </div>
+                <div class="dither-stat">
+                  <div class="lbl">Peak Error</div>
+                  <div class="val" id="ditherPeak">±0.5</div>
+                  <div class="unit">LSB</div>
+                </div>
+                <div class="dither-stat">
+                  <div class="lbl">SNR</div>
+                  <div class="val" id="ditherSnr">96.3</div>
+                  <div class="unit">dB</div>
+                </div>
+              </div>
+              <div class="noise-curve-legend">
+                <div class="curve-item"><div class="curve-dot" style="background:#a855f7;"></div>Dither</div>
+                <div class="curve-item"><div class="curve-dot" style="background:#00e5ff;"></div>Shaped Noise</div>
+                <div class="curve-item"><div class="curve-dot" style="background:#ffea00;"></div>Threshold</div>
+                <div class="curve-item"><div class="curve-dot" style="background:#ff69b4;"></div>Masking Curve</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
